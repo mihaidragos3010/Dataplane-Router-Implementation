@@ -1,0 +1,18 @@
+Mihai Dragos-Andrei
+Grupa 322CB
+
+
+	In aceasta tema am facut un program pentru router care poate trimite packete catre o anumita retea. Cerintele pe care le-am abordat au fost: (a)trimiterea de pachete ip catre o anumita retea pe baza unor tabele statice de routing si arp, (b)realizarea unei cautari eficiente in tabela de routing, (c)trimiterea de pachete arp pentru aflarea dinamica a mac-urilor din intreaga retea. (d)Partial am incercat sa realizaz si trimiterea de pachete Icmp, dar m-am lovit de o problema cu verificarea checksum-urilor. 
+	
+	a) In prima faza primesc un pachet si analizez daca eu sunt destinatia si verific ca checkSum si TTL sa fie corecte si le modific in conformitate. Verific adresa Ip destinatie si caut in tabela de routing reteaua si interfata pe care trebuie sa trimit pachetul. In cazul in care nu l-am gasit trimit un packet Icmp la surasa (functie care nu functioneaza conform). In cazul in care l-am gasit caut in tabela Arp mac-ul destinatie. In cazul in care l-am gasit trimit pachetul.
+	
+	b) Cu ajutorul functiei qsort sortez intreaga tabela de routing crescator dupa prefix si apoi dupa mask. Cand caut in tabela imi setez in targetNetwork si il caut cu ajutorul unei cautari binare. Functia de cautare binara imi salveaza prin parametru interfaza, prefixul, mask si next hop ,dar imi si trimit o valoare de return pentru a imi confirma ca am gasit reteaua cautata.
+	
+	c) In cazul functiei arp dinapice abordez 3 cazuri: 
+		-in cazul in care primesc un mesaj Arp request verific daca eu sunt destinatia si ii trimit un Arp replay 
+	prin care ii furnizaz adresa mea mac de pe interfata respectiva;
+		-in cazul in care nu am gasit un mac in tabela Arp trimit pe intarfata next hop un mesaj arp request pentru 
+	a afla mac-ul dispozitivului cautat dupa Ip, dar si salvez mesajul Ip intr-o coada intarna pentru a il trimite ulterior
+		-in cazul unui Arp replay imi salvez mac-ul in tabela, si trimit primul mesaj pe care il am salvat in coada 	interna
+		
+	
